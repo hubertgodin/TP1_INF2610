@@ -10,7 +10,7 @@
 
 
 int main(int argc, char** argv) {
-    printf("Hello\n");
+    printf("INF2610\n");
     /* Remove comment once the code is completed for the given section to test */
     int id = 1;
 

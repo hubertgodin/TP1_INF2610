@@ -7,6 +7,89 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <stdio.h> 
+#include <stdbool.h>
+
+struct Wheel
+{
+    int id;
+    bool isRealWheel;
+};
+struct Wing
+{
+    int* id;
+};
+struct Plane
+{
+    char* id;
+    char planeType[10];
+    bool isAvailable;
+    struct Wheel* wheels;
+    struct Wing* wings;
+
+};
+
+struct Wheel* createWheels(int id)
+{
+    struct Wheel* wheels = malloc(7*sizeof(struct Wheel));
+    for (int i = 0; i < 7; i++) 
+    {
+        struct Wheel wheel;
+        wheel.id = id;
+        wheel.isRealWheel = true;
+        wheels[i] = wheel;
+        id++;
+    }
+    return wheels;
+}
+unsigned int countNumberOfDigits(int n) {
+    unsigned int nDigits=1;
+    while (n/=10) 
+    {
+        nDigits++;
+    }
+    
+    return nDigits;
+}
+void populateWingAttributes(struct Wing* wing, int id)
+{
+    int* planeId = malloc(9*sizeof(int));
+
+    unsigned int nDigits = countNumberOfDigits(id);
+    
+ 
+    for (int i = 8; i >= 0; i--)
+    {
+        if(nDigits>0)
+        {
+            planeId[i] = id%10;
+            id/=10;
+            nDigits--;
+        }
+        else
+        {
+            planeId[i] = 0;
+        }
+
+    }
+    wing->id = planeId;
+    
+}
+
+struct Wing* createWings(long id)
+{
+    struct Wing* wings = malloc(2*sizeof(struct Wing));
+
+    for(int i = 0; i < 2; i++)
+    {
+        struct Wing wing;
+        populateWingAttributes(&wing, id);
+        wings[i] = wing;
+        id++;
+
+    }
+    return wings;
+}
+
 
 
 int main(int argc, char** argv) {
@@ -18,17 +101,18 @@ int main(int argc, char** argv) {
     /* PARTIE 2 - [10 points] */
 
     /* Create wheel - [2 points] */
-    /*
-    Wheel[] wheels;
+    
+    struct Wheel* wheels;
     wheels = createWheels(id);    
-    */
+    printf("%d\n", wheels[6].id);
 
     /* Create wing - [4 points] */
-    /*
-    long longId = 1;
-    Wing[] wings;
+    
+    long longId = 123456;
+    struct Wing* wings;
     wings = createWings(longId);
-    */
+    
+    printf("%d\n", wings[1].id[8]);
 
     /* Create plane - [4 points] */
     /*

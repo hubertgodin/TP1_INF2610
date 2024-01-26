@@ -50,6 +50,20 @@ unsigned int countNumberOfDigits(int n) {
     
     return nDigits;
 }
+
+char* convertIntegerIntoCharArray(int number)
+{
+    unsigned int nDigits = countNumberOfDigits(number);
+    char* charArray = malloc(nDigits*sizeof(char));
+
+    for (int i = nDigits-1; i >= 0; --i, number /= 10)
+    {
+        charArray[i] = (number % 10) + '0';
+    }
+    return charArray;
+
+}
+
 void populateWingAttributes(struct Wing* wing, int id)
 {
     int* planeId = malloc(9*sizeof(int));
@@ -91,6 +105,33 @@ struct Wing* createWings(long id)
 }
 
 
+void createPlanes(struct Plane* planes, char* charId, int nPlanes)
+{
+    for(int i = 0; i < nPlanes; i++)
+    {
+        struct Plane plane;
+        plane.id = charId;
+        //plane.planeType = {};
+        plane.isAvailable = true;
+
+        int intId;
+        sscanf(charId, "%d", &intId);
+
+        plane.wheels =  createWheels(intId);
+        plane.wings =  createWings(intId);
+
+        planes[i] =  plane;
+        intId++;
+
+        charId = convertIntegerIntoCharArray(intId);
+
+
+
+
+
+    }
+
+}
 
 int main(int argc, char** argv) {
     printf("INF2610\n");
@@ -104,7 +145,7 @@ int main(int argc, char** argv) {
     
     struct Wheel* wheels;
     wheels = createWheels(id);    
-    printf("%d\n", wheels[6].id);
+    printf("%d\n", wheels[0].id);
 
     /* Create wing - [4 points] */
     
@@ -115,11 +156,24 @@ int main(int argc, char** argv) {
     printf("%d\n", wings[1].id[8]);
 
     /* Create plane - [4 points] */
-    /*
+    
     int numberOfPlanes = 3;
-    Plane* planes = malloc(sizeof(Plane) * numberOfPlanes);
-    createPlanes(planes, *id, 3);
-    */
+    char* planeId = "123";
+    struct Plane* planes = malloc(sizeof(struct Plane) * numberOfPlanes);
+    createPlanes(planes, planeId, numberOfPlanes);
+    
+    printf("Plane 1 ID: %c", planes[0].id[0]);
+    printf("%c", planes[0].id[1]);
+    printf("%c\n", planes[0].id[2]);
+    printf("Wheel ID: %d\n\n", planes[0].wheels[6].id);
+   
+    printf("Plane 2 ID: %c", planes[1].id[0]);
+    printf("%c", planes[1].id[1]);
+    printf("%c\n\n", planes[1].id[2]);
+
+    printf("Plane 3 ID: %c", planes[2].id[0]);
+    printf("%c", planes[2].id[1]);
+    printf("%c\n\n", planes[2].id[2]);
 
     /* PARTIE 3 - [6 points] */
 

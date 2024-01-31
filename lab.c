@@ -33,8 +33,9 @@ struct Plane
 
 struct Wheel* createWheels(int id)
 {
-    struct Wheel* wheels = malloc(7*sizeof(struct Wheel));
-    for (int i = 0; i < 7; i++) 
+    unsigned int nWheels = 7;
+    struct Wheel* wheels = malloc(nWheels*sizeof(struct Wheel));
+    for (int i = 0; i < nWheels; i++) 
     {
         struct Wheel wheel;
         wheel.id = id;
@@ -77,34 +78,36 @@ char* convertIntegerIntoCharArray(int number)
 
 void populateWingAttributes(struct Wing* wing, int id)
 {
-    int* planeId = malloc(9*sizeof(int));
+    int sizeOfArrayId = 9;
+    int* wingId = malloc(sizeOfArrayId*sizeof(int));
 
-    unsigned int nDigits = countNumberOfDigits(id);
+    unsigned int nDigitsInId = countNumberOfDigits(id);
     
  
-    for (int i = 8; i >= 0; i--)
+    for (int i = sizeOfArrayId-1; i >= 0; i--)
     {
-        if(nDigits>0)
+        if(nDigitsInId>0)
         {
-            planeId[i] = id%10;
+            wingId[i] = id%10;
             id/=10;
-            nDigits--;
+            nDigitsInId--;
         }
         else
         {
-            planeId[i] = 0;
+            wingId[i] = 0;
         }
 
     }
-    wing->id = planeId;
+    wing->id = wingId;
     
 }
 
 struct Wing* createWings(long id)
 {
-    struct Wing* wings = malloc(2*sizeof(struct Wing));
+    unsigned int nWings = 2;
+    struct Wing* wings = malloc(nWings*sizeof(struct Wing));
 
-    for(int i = 0; i < 2; i++)
+    for(int i = 0; i < nWings; i++)
     {
         struct Wing wing;
         populateWingAttributes(&wing, id);
@@ -126,7 +129,7 @@ void createPlanes(struct Plane* planes, char* charId, int nPlanes)
         plane.isAvailable = true;
 
         int intId;
-        sscanf(charId, "%d", &intId);
+        sscanf(charId, "%d", &intId); //transformer en integer afin d'utiliser l'ID de Plane pour Wheels et Wings
 
         plane.wheels =  createWheels(intId);
         plane.wings =  createWings(intId);
@@ -173,13 +176,15 @@ char** getAvailablePlanes(struct Plane* planes, int nPlanes)
         }
     }
 
+    
 
     return availablePlanes;
 }
 
 void setPlaneType(struct Plane* plane)
 {
-    int wingId = reconstructInt(plane->wings[0].id, 9);
+    int nDigitsInWingId = 9;
+    int wingId = reconstructInt(plane->wings[0].id, nDigitsInWingId);
     int classification = wingId % 9;
 
     if (classification >= 0 && classification <= 2) {
@@ -193,13 +198,13 @@ void setPlaneType(struct Plane* plane)
 struct Plane* getPlanesByType(struct Plane* planes, char planeType[], int nPlanes)
 {
     struct Plane* planesByType = malloc(nPlanes*sizeof(struct Plane));
-    int index = 0;
+    int nPlanesByType = 0;
     for(int i = 0; i< nPlanes; i++)
     {
         if (strcmp(planes[i].planeType, planeType) == 0) 
         {
-            planesByType[index] = planes[i];
-            index++;
+            planesByType[nPlanesByType] = planes[i];
+            nPlanesByType++;
         }
     }
     return planesByType;
